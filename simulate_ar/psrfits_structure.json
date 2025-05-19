@@ -1,0 +1,366 @@
+{
+    "PRIMARY": {
+        "SIMPLE": true,
+        "BITPIX": 8,
+        "NAXIS": 0,
+        "EXTEND": true,
+        "HDRVER": "6.7",
+        "FITSTYPE": "PSRFITS",
+        "DATE": "",
+        "OBSERVER": "NONE",
+        "PROJID": "NONE",
+        "TELESCOP": "NONE",
+        "ANT_X": 1.11,
+        "ANT_Y": 0.0,
+        "ANT_Z": 0.0,
+        "FRONTEND": "NONE",
+        "IBEAM": "",
+        "NRCVR": 2,
+        "FD_POLN": "LIN",
+        "FD_HAND": -1,
+        "FD_SANG": 45.0,
+        "FD_XYPH": 0.0,
+        "BACKEND": "NONE",
+        "BECONFIG": "",
+        "BE_PHASE": 1,
+        "BE_DCC": 0,
+        "BE_DELAY": 0.0,
+        "TCYCLE": 8.0,
+        "OBS_MODE": "PSR",
+        "DATE-OBS": "2020-09-11T18:23:53",
+        "OBSFREQ": 1283.58203125,
+        "OBSBW": 856.0,
+        "OBSNCHAN": 1024,
+        "CHAN_DM": "*",
+        "PNT_ID": "",
+        "SRC_NAME": "NONE",
+        "COORD_MD": "J2000",
+        "EQUINOX": 2000.0,
+        "RA": "",
+        "DEC": "",
+        "BMAJ": 0.0,
+        "BMIN": 0.0,
+        "BPA": 0.0,
+        "STT_CRD1": "",
+        "STT_CRD2": "",
+        "TRK_MODE": "TRACK",
+        "STP_CRD1": "",
+        "STP_CRD2": "",
+        "SCANLEN": "*",
+        "FD_MODE": "FA",
+        "FA_REQ": 0.0,
+        "CAL_MODE": "",
+        "CAL_FREQ": "*",
+        "CAL_DCYC": "*",
+        "CAL_PHS": "*",
+        "CAL_NPHS": "*",
+        "STT_IMJD": 60000,
+        "STT_SMJD": 1,
+        "STT_OFFS": 0.999,
+        "STT_LST": 0.0
+    },
+    "HISTORY": {
+        "hdr": {},
+        "tab": {
+            "DATE_PRO": {
+                "format": "24A",
+                "unit": null,
+                "dim": null
+            },
+            "PROC_CMD": {
+                "format": "256A",
+                "unit": null,
+                "dim": null
+            },
+            "SCALE": {
+                "format": "8A",
+                "unit": null,
+                "dim": null
+            },
+            "POL_TYPE": {
+                "format": "8A",
+                "unit": null,
+                "dim": null
+            },
+            "NSUB": {
+                "format": "1J",
+                "unit": null,
+                "dim": null
+            },
+            "NPOL": {
+                "format": "1I",
+                "unit": null,
+                "dim": null
+            },
+            "NBIN": {
+                "format": "1I",
+                "unit": null,
+                "dim": null
+            },
+            "NBIN_PRD": {
+                "format": "1I",
+                "unit": null,
+                "dim": null
+            },
+            "TBIN": {
+                "format": "1D",
+                "unit": "s",
+                "dim": null
+            },
+            "CTR_FREQ": {
+                "format": "1D",
+                "unit": "MHz",
+                "dim": null
+            },
+            "NCHAN": {
+                "format": "1J",
+                "unit": null,
+                "dim": null
+            },
+            "CHAN_BW": {
+                "format": "1D",
+                "unit": "MHz",
+                "dim": null
+            },
+            "REF_FREQ": {
+                "format": "1D",
+                "unit": "MHz",
+                "dim": null
+            },
+            "DM": {
+                "format": "1D",
+                "unit": "CM-3",
+                "dim": null
+            },
+            "RM": {
+                "format": "1D",
+                "unit": "RAD",
+                "dim": null
+            },
+            "PR_CORR": {
+                "format": "1I",
+                "unit": null,
+                "dim": null
+            },
+            "FD_CORR": {
+                "format": "1I",
+                "unit": null,
+                "dim": null
+            },
+            "BE_CORR": {
+                "format": "1I",
+                "unit": null,
+                "dim": null
+            },
+            "RM_CORR": {
+                "format": "1I",
+                "unit": null,
+                "dim": null
+            },
+            "DEDISP": {
+                "format": "1I",
+                "unit": null,
+                "dim": null
+            },
+            "DDS_MTHD": {
+                "format": "32A",
+                "unit": null,
+                "dim": null
+            },
+            "SC_MTHD": {
+                "format": "32A",
+                "unit": null,
+                "dim": null
+            },
+            "CAL_MTHD": {
+                "format": "32A",
+                "unit": null,
+                "dim": null
+            },
+            "CAL_FILE": {
+                "format": "256A",
+                "unit": null,
+                "dim": null
+            },
+            "RFI_MTHD": {
+                "format": "32A",
+                "unit": null,
+                "dim": null
+            },
+            "RM_MODEL": {
+                "format": "32A",
+                "unit": null,
+                "dim": null
+            },
+            "AUX_RM_C": {
+                "format": "1I",
+                "unit": null,
+                "dim": null
+            },
+            "DM_MODEL": {
+                "format": "32A",
+                "unit": null,
+                "dim": null
+            },
+            "AUX_DM_C": {
+                "format": "1I",
+                "unit": null,
+                "dim": null
+            }
+        }
+    },
+    "PSRPARAM": {
+        "hdr": {},
+        "tab": {
+            "PARAM": {
+                "format": "128A",
+                "unit": null,
+                "dim": null
+            }
+        }
+    },
+    "T2PREDICT": {
+        "hdr": {},
+        "tab": {
+            "PREDICT": {
+                "format": "128A",
+                "unit": null,
+                "dim": null
+            }
+        }
+    },
+    "SUBINT": {
+        "hdr": {
+            "EPOCHS": "VALID",
+            "INT_TYPE": "TIME",
+            "INT_UNIT": "SEC",
+            "SCALE": "FluxDen",
+            "POL_TYPE": "IQUV",
+            "NPOL": 4,
+            "TBIN": "*",
+            "NBIN": 1024,
+            "NBIN_PRD": "*",
+            "PHS_OFFS": "*",
+            "NBITS": "*",
+            "ZERO_OFF": "*",
+            "SIGNINT": 0,
+            "NSUBOFFS": "*",
+            "NCHAN": 32,
+            "CHAN_BW": 24.2421875,
+            "REFFREQ": 1283.58203125,
+            "DM": 11.5161292866607,
+            "RM": 9.7148662946594,
+            "NCHNOFFS": "*",
+            "NSBLK": 1,
+            "NSTOT": "*",
+            "NINFO": 0
+        },
+        "tab": {
+            "INDEXVAL": {
+                "format": "1D",
+                "unit": null,
+                "dim": null
+            },
+            "TSUBINT": {
+                "format": "1D",
+                "unit": "s",
+                "dim": null
+            },
+            "OFFS_SUB": {
+                "format": "1D",
+                "unit": "s",
+                "dim": null
+            },
+            "PERIOD": {
+                "format": "1D",
+                "unit": "s",
+                "dim": null
+            },
+            "LST_SUB": {
+                "format": "1D",
+                "unit": "s",
+                "dim": null
+            },
+            "RA_SUB": {
+                "format": "1D",
+                "unit": "deg",
+                "dim": null
+            },
+            "DEC_SUB": {
+                "format": "1D",
+                "unit": "deg",
+                "dim": null
+            },
+            "GLON_SUB": {
+                "format": "1D",
+                "unit": "deg",
+                "dim": null
+            },
+            "GLAT_SUB": {
+                "format": "1D",
+                "unit": "deg",
+                "dim": null
+            },
+            "FD_ANG": {
+                "format": "1E",
+                "unit": "deg",
+                "dim": null
+            },
+            "POS_ANG": {
+                "format": "1E",
+                "unit": "deg",
+                "dim": null
+            },
+            "PAR_ANG": {
+                "format": "1E",
+                "unit": "deg",
+                "dim": null
+            },
+            "TEL_AZ": {
+                "format": "1E",
+                "unit": "deg",
+                "dim": null
+            },
+            "TEL_ZEN": {
+                "format": "1E",
+                "unit": "deg",
+                "dim": null
+            },
+            "AUX_DM": {
+                "format": "1D",
+                "unit": "CM-3",
+                "dim": null
+            },
+            "AUX_RM": {
+                "format": "1D",
+                "unit": "RAD",
+                "dim": null
+            },
+            "DAT_FREQ": {
+                "format": "32D",
+                "unit": "MHz",
+                "dim": null
+            },
+            "DAT_WTS": {
+                "format": "32E",
+                "unit": null,
+                "dim": null
+            },
+            "DAT_OFFS": {
+                "format": "128E",
+                "unit": null,
+                "dim": null
+            },
+            "DAT_SCL": {
+                "format": "128E",
+                "unit": null,
+                "dim": null
+            },
+            "DATA": {
+                "format": "131072I",
+                "unit": "Jy",
+                "dim": "(1024,32,4)"
+            }
+        }
+    }
+}
