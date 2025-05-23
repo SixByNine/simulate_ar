@@ -67,7 +67,7 @@ class Epoch:
     def from_string(string):
         e=string.split(".")
         i = int(e[0])
-        if len(e) > 0:
+        if len(e) > 1:
             f = float("0."+e[1])
         else:
             f=0

@@ -29,12 +29,14 @@ class VonMisesProfile:
 
 
     def compute(self,phase, freq, epoch,nbin):
+        # print(f"phase {phase}")
+        # print(f"freq {freq}")
         freq = np.atleast_1d(freq)
         outprof = np.zeros((len(freq), nbin))
         phase_axis = np.arange(nbin)/nbin
         for vm in self.components:
             amp = vm.amp * (vm.ref_freq/freq)**vm.spectral_index
-            outprof += np.outer(amp, np.exp(((np.cos(2*np.pi*(phase_axis - phase+vm.phase))-1) *vm.k)))
+            outprof += np.outer(amp, np.exp(((np.cos(2*np.pi*(phase_axis - phase-vm.phase))-1) *vm.k)))
 
         return outprof
 

@@ -27,7 +27,7 @@ class TsysNoise:
             T = self.tsys + self.tsky * (subint.ssb_freq/self.tsky_ref_freq)**self.tsky_index
             chanbw= simulated_obs.obs_setup.bw/simulated_obs.obs_setup.nchan
             tobs = subint.tsub
-            sefd = T/(self.gain*np.sqrt(2*chanbw*tobs))
+            sefd = T/(self.gain*np.sqrt(2*chanbw*1e6*(tobs/simulated_obs.obs_setup.nbin)))
             for ichan in range(simulated_obs.obs_setup.nchan):
                 for ipol in range(simulated_obs.obs_setup.npol):
                     subint.data[ipol,ichan] += np.random.normal(scale=sefd[ichan], size=subint.nbin)

@@ -337,7 +337,7 @@ class Simulation:
 
         for isub,si in enumerate(self.subints):
             
-            prof = si.data
+            prof = si.data*1e3 # PSRFITS data is in mJy, data are in Jy.
 
             profmax = np.reshape(np.amax(prof,axis=2),(npol,nchan,1))
             profmin = np.reshape(np.amin(prof,axis=2),(npol,nchan,1))
@@ -387,7 +387,7 @@ class Simulation:
             bary_epoch = subint.ssb_epoch
             phase0 = self.ssb_predictor.getPrecisePhase(bary_epoch.imjd, np.longdouble(bary_epoch.fmjd), 1e12)
             prof = generator.compute(phase0, subint.ssb_freq, bary_epoch, subint.nbin)
-            print("phase",phase0)
+            #print("phase",phase0)
             if len(prof.shape) == 2:
                 prof = np.reshape(prof,(1,self.obs_setup.nchan,subint.nbin))
             if prof.shape != subint.data.shape:
@@ -396,6 +396,7 @@ class Simulation:
             dm_delay = propagation_model.get_delays(subint.ssb_freq) # Maybe more parameters?
             for ichan in range(self.obs_setup.nchan):
                 phase = self.ssb_predictor.getPrecisePhase(bary_epoch.imjd,np.longdouble(bary_epoch.fmjd-dm_delay[ichan]/86400.0), 1e12)
+                #print("ichan,phase=",ichan,phase)
                 for ipol in range(self.obs_setup.npol):
                     subint.data[ipol,ichan] = rotate_phs_1d(prof[ipol,ichan],phase-phase0)
 
