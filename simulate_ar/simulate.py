@@ -82,8 +82,8 @@ class Subint:
     altaz: coord.AltAz
     nbin: int
     nchan: int
+    npol: int
     tsub: float
-    
     # 
     data: np.ndarray
     weights: np.ndarray
@@ -205,7 +205,7 @@ class Simulation:
                                 doppler_factor=doppler[isub],lst=lst,
                                 pointing=nowcoord,par_angle=parallactic_angle,
                                 altaz=altaz,nbin=self.obs_setup.nbin,
-                                nchan=self.obs_setup.nchan,tsub=self.obs_setup.tsub,
+                                nchan=self.obs_setup.nchan,npol=self.obs_setup.npol,tsub=self.obs_setup.tsub,
                                 data=np.zeros((self.obs_setup.npol,self.obs_setup.nchan,self.obs_setup.nbin)),
                                 weights=np.ones(self.obs_setup.nchan))
                 self.subints.append(subint)
