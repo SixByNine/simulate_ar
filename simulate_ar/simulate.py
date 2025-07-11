@@ -386,7 +386,7 @@ class Simulation:
             print(f"Generating subint {isub}/{len(self.subints)}")
             bary_epoch = subint.ssb_epoch
             phase0 = self.ssb_predictor.getPrecisePhase(bary_epoch.imjd, np.longdouble(bary_epoch.fmjd), 1e12)
-            prof = generator.compute(phase0, subint.ssb_freq, bary_epoch, subint.nbin)
+            prof = generator.compute(-phase0, subint.ssb_freq, bary_epoch, subint.nbin)
             #print("phase",phase0)
             if len(prof.shape) == 2:
                 prof = np.reshape(prof,(1,self.obs_setup.nchan,subint.nbin))
