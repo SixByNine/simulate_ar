@@ -15,8 +15,9 @@ from .epoch import Epoch
 
 
 def rotate_phs_1d(inprof, phase_shift):
+    # Rotate to the right by phase_shift
     ff = np.fft.rfft(inprof)
-    fr = ff * np.exp(1.0j * 2 * np.pi * np.arange(len(ff)) * phase_shift)
+    fr = ff * np.exp(-1.0j * 2 * np.pi * np.arange(len(ff)) * phase_shift)
     return np.fft.irfft(fr)
 
 
@@ -386,6 +387,10 @@ class Simulation:
             print(f"Generating subint {isub}/{len(self.subints)}")
             bary_epoch = subint.ssb_epoch
             phase0 = self.ssb_predictor.getPrecisePhase(bary_epoch.imjd, np.longdouble(bary_epoch.fmjd), 1e12)
+            # This is the phase of the pulsar at the barycentric epoch of the subint at infinite frequency.
+            # Somewhat confusingly, this means that the pulsar profile needs to be shifted backwards by this phase
+            # So that the profile peak aligns with phase 0.
+            # Do not confuse this with the phase that would be measured - as this is backwards.
             prof = generator.compute(-phase0, subint.ssb_freq, bary_epoch, subint.nbin)
             #print("phase",phase0)
             if len(prof.shape) == 2:
@@ -396,9 +401,11 @@ class Simulation:
             dm_delay = propagation_model.get_delays(subint.ssb_freq) # Maybe more parameters?
             for ichan in range(self.obs_setup.nchan):
                 phase = self.ssb_predictor.getPrecisePhase(bary_epoch.imjd,np.longdouble(bary_epoch.fmjd-dm_delay[ichan]/86400.0), 1e12)
+                # This is the phase of the pulsar at the barycentric epoch at the channel frequency.
                 #print("ichan,phase=",ichan,phase)
                 for ipol in range(self.obs_setup.npol):
-                    subint.data[ipol,ichan] = rotate_phs_1d(prof[ipol,ichan],phase-phase0)
+                    # We also rotate this one backwards, so that the profile peak aligns with phase 0.
+                    subint.data[ipol,ichan] = rotate_phs_1d(prof[ipol,ichan],-(phase-phase0))
 
         propagation_model.apply(self)
 
