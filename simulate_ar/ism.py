@@ -102,7 +102,7 @@ class ScintScatISM:
         print("Scintillation time: ",scint_time)
         print(f"nchan={nchan}, nsub={nsub}, tsub={tsub}, ds={ds}, ns={ns}")
 
-        self.sim = scinttools_simulate_lite.Simulation(mb2=mb2, rf=1,ds=ds,inner=0.1*ds, ns=ns,nf=nchan,dlam=bw/cfreq,plot=True,verbose=True, freq=cfreq,dt=tsub)
+        self.sim = scinttools_simulate_lite.Simulation(mb2=mb2, rf=1,ds=ds,inner=0.1*ds, ns=ns,nf=nchan,dlam=bw/cfreq,plot=False,verbose=True, freq=cfreq,dt=tsub)
 
         raw_dynamic_spectrum = self.sim.spi
 
