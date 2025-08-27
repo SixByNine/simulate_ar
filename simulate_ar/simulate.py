@@ -352,7 +352,7 @@ class Simulation:
             dat_scl = rng.reshape(npol*nchan)/ (2**15 - 1)
             data = prof.flatten()
 
-            ra_sub=si.pointing.ra.deg
+            ra_sub=si.pointing.ra.wrap_at(360.0*u.deg).deg # want ra between 0 and 360
             dec_sub=si.pointing.dec.deg
             glon_sub=si.pointing.galactic.l.deg
             glat_sub=si.pointing.galactic.b.deg
