@@ -9,6 +9,7 @@ import json
 import datetime
 import astropy.io.fits as fits
 from dataclasses import dataclass
+import scipy.interpolate as interp
 
 from .pulsar import Pulsar
 from .epoch import Epoch
@@ -145,13 +146,21 @@ class Simulation:
                 # print(phase, phase2,freq)
 
             # Compute SSB information.
-
-        
+            predictor_buffer=1000/86400.0 # 1000 seconds buffer should be enough for barycentering
+            one_minute_in_days = 60.0/86400.0
+            n_bary_interp_epoch = (2*predictor_buffer+predictor_length)/ one_minute_in_days # 1 per minute
             with open(os.path.join(tempdir,"trial.tim"),"w") as f:
                 f.write("FORMAT 1\n")
                 for isub,e in enumerate(subint_epochs):
                     f.write(f" inffreq_{isub} 0.0 {e} 1.0 {self.observatory.tempo2_name}\n")
                     f.write(f" 1freq_{isub} 1.0 {e} 1.0 {self.observatory.tempo2_name}\n")
+                
+                start = obs_epoch-predictor_buffer
+                # Make one epoch per minute:
+
+                for iepoch in range(int(n_bary_interp_epoch)+1):
+                    epoch = start + iepoch*one_minute_in_days
+                    f.write(f" interp_{iepoch} 0.0 {epoch} 1.0 {self.observatory.tempo2_name}\n")
 
             print(f"tempo2 -nofit -output general2 -f sim. trial.tim  -s \"{{sat}} {{bat}} {{freq}} {{freqssb}} ZZ\\n\"")
             subprocess.call(f"tempo2 -nofit -output general2 -f sim.par trial.tim  -s \"{{sat}} {{bat}} {{freq}} {{freqssb}} ZZ\\n\" | grep ZZ > trial.info",shell=True,cwd=tempdir)
@@ -166,14 +175,35 @@ class Simulation:
                     bary_epoch.append(Epoch(barymjd_int,barymjd_frac))
                     e = f.readline().split() # the 1MHz one
                     doppler.append(float(e[3])/1e6)
+                deltas=[]
+                bats = []
+                for iepoch in range(int(n_bary_interp_epoch)+1):
+                    e = f.readline().split()
+                    satmjd_int = int(e[0].split(".")[0])
+                    satmjd_frac = float("0."+e[0].split(".")[1])
+                    batmjd_int = int(e[1].split(".")[0])
+                    batmjd_frac = float("0."+e[1].split(".")[1])
+                    Epoch_sat = Epoch(satmjd_int,satmjd_frac)
+                    Epoch_bat = Epoch(batmjd_int,batmjd_frac)
+                    deltas.append((Epoch_bat - Epoch_sat).to_seconds())
+                    bats.append(Epoch_bat.to_mjd())
+                    #print(obs_epoch,Epoch_sat,Epoch_bat,(Epoch_bat - Epoch_sat).to_seconds())
+                
 
-            predictor_buffer=3600/86400.0 # Make the ssb predictor much longer than needed
+                self.bary2topo_interpolator = interp.interp1d(bats,deltas,kind='linear')
+
+                
+
 
             print(f"tempo2 -pred \"@ {obs_epoch-predictor_buffer} {obs_epoch+predictor_length+predictor_buffer} 1e11 1e13 12 2 3660\" -f sim.par")
 
             subprocess.call(f"tempo2 -pred \"@ {obs_epoch-predictor_buffer} {obs_epoch+predictor_length+predictor_buffer} 1e11 1e13 12 2 3660\" -f sim.par",shell=True,cwd=tempdir)
 
             self.ssb_predictor = t2pred.phase_predictor(os.path.join(tempdir,"t2pred.dat"))
+
+            subprocess.call(f"tempo2 -pred \"{self.observatory.tempo2_name}  {obs_epoch-predictor_buffer} {obs_epoch+predictor_length+predictor_buffer} 1e11 1e13 12 2 3660\" -f sim.par",shell=True,cwd=tempdir)
+
+            self.inf_freq_site_predictor = t2pred.phase_predictor(os.path.join(tempdir,"t2pred.dat"))
             
             freq_table = self.obs_setup.get_freq_table()
 
@@ -211,6 +241,12 @@ class Simulation:
                                 weights=np.ones(self.obs_setup.nchan))
                 self.subints.append(subint)
     
+    def bary2topo(self,bary_epoch):
+        # Convert barycentric epoch to topocentric epoch using linear interpolation of precomputed values.
+        delta = self.bary2topo_interpolator(bary_epoch.to_mjd())
+        #print("bary2topo",bary_epoch,delta,bary_epoch - delta/86400.0)
+        return bary_epoch - delta/86400.0
+
 
     def make_fits(self):
         try:
@@ -386,7 +422,9 @@ class Simulation:
         for isub,subint in enumerate(self.subints):
             print(f"Generating subint {isub}/{len(self.subints)}")
             bary_epoch = subint.ssb_epoch
-            phase0 = self.ssb_predictor.getPrecisePhase(bary_epoch.imjd, np.longdouble(bary_epoch.fmjd), 1e12)
+
+            topo_epoch = self.bary2topo(bary_epoch)
+            phase0 = self.inf_freq_site_predictor.getPrecisePhase(topo_epoch.imjd, np.longdouble(topo_epoch.fmjd), 1e12)
             # This is the phase of the pulsar at the barycentric epoch of the subint at infinite frequency.
             # Somewhat confusingly, this means that the pulsar profile needs to be shifted backwards by this phase
             # So that the profile peak aligns with phase 0.
@@ -399,8 +437,10 @@ class Simulation:
                 raise ValueError(f"Profile shape {prof.shape} does not match subint shape {subint.data.shape}")
 
             dm_delay = propagation_model.get_delays(subint.ssb_freq) # Maybe more parameters?
+
             for ichan in range(self.obs_setup.nchan):
-                phase = self.ssb_predictor.getPrecisePhase(bary_epoch.imjd,np.longdouble(bary_epoch.fmjd-dm_delay[ichan]/86400.0), 1e12)
+                topo_epoch = self.bary2topo(bary_epoch - dm_delay[ichan]/86400.0)
+                phase = self.inf_freq_site_predictor.getPrecisePhase(topo_epoch.imjd,np.longdouble(topo_epoch.fmjd), 1e12)
                 # This is the phase of the pulsar at the barycentric epoch at the channel frequency.
                 #print("ichan,phase=",ichan,phase)
                 for ipol in range(self.obs_setup.npol):

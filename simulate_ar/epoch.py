@@ -75,3 +75,9 @@ class Epoch:
     
     def to_seconds(self):
         return self.imjd * 86400.0 + self.fmjd * 86400.0
+    
+    def to_float(self):
+        return self.imjd + self.fmjd
+    
+    def to_mjd(self):
+        return self.imjd + self.fmjd
