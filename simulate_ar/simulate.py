@@ -190,7 +190,7 @@ class Simulation:
                     #print(obs_epoch,Epoch_sat,Epoch_bat,(Epoch_bat - Epoch_sat).to_seconds())
                 
 
-                self.bary2topo_interpolator = interp.interp1d(bats,deltas,kind='linear')
+                self.bary2topo_interpolator = interp.interp1d(bats,deltas,kind='cubic')
 
                 
 
