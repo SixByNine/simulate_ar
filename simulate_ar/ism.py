@@ -5,6 +5,8 @@ import numpy as np
 @dataclass 
 class SimpleISM:
     dm: float = 0.0
+    scattering_timescale_1ghz: float = 0.0
+    scattering_index: float = -4.0
 
     def get_delays(self,ssb_freq):
         # Calculate the delays for the given frequencies
@@ -12,6 +14,21 @@ class SimpleISM:
         return dm_delay
     
     def apply(self, simulated_obs):
+        if self.scattering_timescale_1ghz > 0:
+            for isub, subint in enumerate(simulated_obs.subints):
+                # scattering timescale from scintilation bandwidth
+                tscat = self.scattering_timescale_1ghz * (subint.ssb_freq/1000)**self.scattering_index
+                tscat_phase = tscat / subint.ssb_period
+                phase = np.arange(subint.nbin)/subint.nbin
+            
+                exponentials = np.exp(-np.outer(phase,1/tscat_phase)).T
+                # normalise exponentials
+                exponentials /= np.sum(exponentials, axis=1)[:, np.newaxis]
+                filter = np.fft.rfft(exponentials,axis=1)
+                for ipol in range(subint.npol):
+                    data_fft = np.fft.rfft(subint.data[ipol], axis=1)
+                    data_fft *= filter
+                    subint.data[ipol] = np.fft.irfft(data_fft, axis=1)
         return
     
     def generate(self, cfreq, bw ,nchan,nsub,tsub):
@@ -65,6 +82,7 @@ class ScintScatISM:
             phase = np.arange(subint.nbin)/subint.nbin
             
             exponentials = np.exp(-np.outer(phase,1/tscat_phase)).T
+            exponentials /= np.sum(exponentials, axis=1)[:, np.newaxis]
             filter = np.fft.rfft(exponentials,axis=1)
             for ipol in range(subint.npol):
                 data_fft = np.fft.rfft(subint.data[ipol], axis=1)
